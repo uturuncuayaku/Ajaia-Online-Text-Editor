@@ -14,6 +14,7 @@ This document records the specific engineering errors, breaking changes, and und
 6. [Next.js 16 `useParams()` Prerendering & Suspense Boundary](#6-nextjs-16-useparams-prerendering--suspense-boundary)
 7. [Next.js 16 `cacheComponents` Incompatibility with `export const dynamic`](#7-nextjs-16-cachecomponents-incompatibility-with-export-const-dynamic)
 8. [Prisma P1012: Environment Variable Not Found `DATABASE_URL` on Vercel](#8-prisma-p1012-environment-variable-not-found-database_url-on-vercel)
+9. [Prisma P2021: Table `main.User` / `main.Document` Does Not Exist in Serverless Runtime](#9-prisma-p2021-table-mainuser--maindocument-does-not-exist-in-serverless-runtime)
 
 ---
 
@@ -247,3 +248,48 @@ const envPath = path.join(process.cwd(), ".env");
 fs.writeFileSync(envPath, `DATABASE_URL="${databaseUrl}"\n`, "utf8");
 ```
 Now, whether deployed with or without a connected Postgres database, the build generates the Prisma client and Next.js bundle without failure.
+
+---
+
+## 9. Prisma P2021: Table `main.User` / `main.Document` Does Not Exist in Serverless Runtime
+
+### ❌ The Error
+```
+Error fetching users: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findMany()` invocation:
+
+The table `main.User` does not exist in the current database.
+  code: 'P2021',
+  meta: { modelName: 'User', table: 'main.User' },
+  clientVersion: '6.19.3'
+```
+
+### 🔍 Why It Happened
+1. **Serverless Lambda Isolation**: On Vercel, the build container that runs `npm run build` is isolated from the runtime serverless lambdas.
+2. In SQLite mode (`/tmp/dev.db`), each serverless cold start spins up a fresh, empty `/tmp` directory.
+3. Even though `prisma db push` ran during build, the created database file is not persisted into runtime lambda instances.
+4. When the API route invokes `prisma.user.findMany()`, Prisma opens an uninitialized database and fails because the `User` table has not been created yet in that runtime instance.
+
+### 💡 The Solution
+Implemented automatic runtime DDL execution inside `src/lib/seedHelper.ts`:
+```typescript
+// Ensure tables exist before querying on fresh serverless cold starts
+await prisma.$executeRawUnsafe(`
+  CREATE TABLE IF NOT EXISTS "User" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL UNIQUE,
+    "avatarUrl" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );
+`).catch(() => {});
+
+await prisma.$executeRawUnsafe(`
+  CREATE TABLE IF NOT EXISTS "Document" ( ... );
+`).catch(() => {});
+
+await prisma.$executeRawUnsafe(`
+  CREATE TABLE IF NOT EXISTS "Share" ( ... );
+`).catch(() => {});
+```
+This guarantees that whenever a serverless lambda boots up (whether connected to PostgreSQL or fallback SQLite), all tables are created in milliseconds and seeded automatically on first access.

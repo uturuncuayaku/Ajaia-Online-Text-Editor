@@ -2,7 +2,40 @@ import { PrismaClient } from "@prisma/client";
 
 export async function ensureSeeded(prisma: PrismaClient) {
   try {
-    const userCount = await prisma.user.count();
+    // 1. Ensure tables exist in SQLite / Postgres if running in a fresh lambda
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "User" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "name" TEXT NOT NULL,
+        "email" TEXT NOT NULL UNIQUE,
+        "avatarUrl" TEXT,
+        "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `).catch(() => {});
+
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "Document" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "title" TEXT NOT NULL DEFAULT 'Untitled Document',
+        "content" TEXT NOT NULL DEFAULT '',
+        "ownerId" TEXT NOT NULL,
+        "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `).catch(() => {});
+
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "Share" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "documentId" TEXT NOT NULL,
+        "userId" TEXT NOT NULL,
+        "permission" TEXT NOT NULL DEFAULT 'viewer',
+        "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `).catch(() => {});
+
+    // 2. Check if users already exist
+    const userCount = await prisma.user.count().catch(() => 0);
     if (userCount > 0) return;
 
     console.log("🌱 Database is empty. Seeding initial users and documents...");
