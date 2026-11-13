@@ -13,6 +13,7 @@ This document records the specific engineering errors, breaking changes, and und
 5. [Vitest 5 Missing `vite` Runtime Module](#5-vitest-5-missing-vite-runtime-module)
 6. [Next.js 16 `useParams()` Prerendering & Suspense Boundary](#6-nextjs-16-useparams-prerendering--suspense-boundary)
 7. [Next.js 16 `cacheComponents` Incompatibility with `export const dynamic`](#7-nextjs-16-cachecomponents-incompatibility-with-export-const-dynamic)
+8. [Prisma P1012: Environment Variable Not Found `DATABASE_URL` on Vercel](#8-prisma-p1012-environment-variable-not-found-database_url-on-vercel)
 
 ---
 
@@ -196,3 +197,53 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 After removing the experimental flag, `npm run build` compiled all 7 static and dynamic API routes cleanly.
+
+---
+
+## 8. Prisma P1012: Environment Variable Not Found `DATABASE_URL` on Vercel
+
+### ❌ The Error
+```
+Error: Prisma schema validation - (get-config wasm)
+Error code: P1012
+error: Environment variable not found: DATABASE_URL.
+  -->  prisma/schema.prisma:10
+   | 
+ 9 |   provider = "sqlite"
+10 |   url      = env("DATABASE_URL")
+   | 
+Validation Error Count: 1
+[Context: getConfig]
+Prisma CLI Version : 6.19.3
+Error: [BUILD_UTILS_SPAWN_1] Command "npm run build" exited with 1
+```
+
+### 🔍 Why It Happened
+1. `.env` is ignored by Git in `.gitignore` (as standard security practice).
+2. When deploying to Vercel before linking an external database, Vercel does not have `DATABASE_URL` set in its environment variables.
+3. When `npm run build` triggered `npx prisma generate`, Prisma evaluated `url = env("DATABASE_URL")`, found it missing, and halted the build with error code `P1012`.
+
+### 💡 The Solution
+Enhanced `prisma/prepare.ts` to automatically provision a fallback `.env` before any Prisma command executes:
+```typescript
+import fs from "fs";
+import path from "path";
+
+// Vercel Postgres provides POSTGRES_PRISMA_URL, POSTGRES_URL, or DATABASE_URL
+let databaseUrl =
+  process.env.POSTGRES_PRISMA_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.DATABASE_URL ||
+  "";
+
+// If empty, provision fallback SQLite
+if (!databaseUrl) {
+  databaseUrl = "file:./dev.db";
+  process.env.DATABASE_URL = databaseUrl;
+}
+
+// Always generate .env so Prisma CLI never encounters P1012
+const envPath = path.join(process.cwd(), ".env");
+fs.writeFileSync(envPath, `DATABASE_URL="${databaseUrl}"\n`, "utf8");
+```
+Now, whether deployed with or without a connected Postgres database, the build generates the Prisma client and Next.js bundle without failure.
