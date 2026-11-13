@@ -77,6 +77,7 @@ Maximum file size: **5 MB**.
 
 - [**Technology Stack & Design Architecture**](TECH_STACK.md) — Visual design, canvas swirl motion, and system overview.
 - [**Deployment & Scripts Guide**](DEPLOYMENT.md) — Available npm scripts, Docker, Vercel, and cloud deployment guides.
+- [**Engineering Error Log & Troubleshooting Guide**](ERRORS_AND_TROUBLESHOOTING.md) — Detailed record of build challenges, breaking changes, and resolutions.
 - [**Structured Build Plan**](PLAN.md) — Milestone breakdown, time windows, and scope rationale.
 - [**Original Assignment Brief**](ASSIGNMENT.md) — Requirements and evaluation criteria.
 
