@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { ensureSeeded } from "@/lib/seedHelper";
 
 export async function GET() {
   try {
+    await ensureSeeded(prisma);
+
     const users = await prisma.user.findMany({
       orderBy: { name: "asc" },
       include: {

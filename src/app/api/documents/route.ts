@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { ensureSeeded } from "@/lib/seedHelper";
 
 export async function GET(request: NextRequest) {
   try {
+    await ensureSeeded(prisma);
+
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 

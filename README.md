@@ -2,6 +2,8 @@
 
 A lightweight collaborative document editor inspired by **Google Docs** and styled after [Ajaia's AI Platform](https://ajaia.ai/).
 
+🌐 **Live Deployment**: [https://ajaia-online-text-editor.vercel.app](https://ajaia-online-text-editor.vercel.app)
+
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma)

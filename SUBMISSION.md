@@ -11,7 +11,7 @@
 | Deliverable | URL / Location |
 |---|---|
 | **GitHub Repository** | [https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor](https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor) |
-| **Live Production App** | [Insert Vercel URL once deployed] |
+| **Live Production App** | [https://ajaia-online-text-editor.vercel.app](https://ajaia-online-text-editor.vercel.app) |
 | **Walkthrough Video** | [Insert Loom / YouTube Link] |
 | **Local Port** | `http://localhost:3000` |
 
