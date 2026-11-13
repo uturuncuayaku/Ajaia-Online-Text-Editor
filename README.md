@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ajaia Online Text Editor
 
-## Getting Started
+A lightweight collaborative document editor inspired by **Google Docs** and styled after [Ajaia's AI Platform](https://ajaia.ai/).
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?logo=tailwindcss)
+![Tiptap](https://img.shields.io/badge/Editor-Tiptap-black)
 
+---
+
+## ⚡ Quick Start
+
+### One-command setup
 ```bash
+git clone <repo-url>
+cd Ajaia_Project
+bash setup.sh --seed --dev
+```
+This single command installs dependencies, initializes and seeds the SQLite database, and starts the development server at **http://localhost:3000**.
+
+### Manual setup
+```bash
+npm install --legacy-peer-deps
+npm install-scripts approve @prisma/client prisma @prisma/engines esbuild
+cp .env.example .env
+npx prisma generate
+npx prisma db push
+npx tsx prisma/seed.ts
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 👥 Seeded Test Accounts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Switch users anytime via the **User Switcher Drawer** in the top navigation banner:
 
-## Learn More
+| User | Email | Role | Default Data |
+|---|---|---|---|
+| **Alice Johnson** | alice@ajaia.com | Team Lead | Owns "Welcome to Ajaia Docs" |
+| **Bob Smith** | bob@ajaia.com | Engineer | Owns "Project Roadmap Q1" (Shared with Alice & Charlie) |
+| **Charlie Davis** | charlie@ajaia.com | Reviewer | Viewer access to team docs |
 
-To learn more about Next.js, take a look at the following resources:
+No passwords required. Switching users immediately refreshes document permissions and sharing states.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Supported File Imports
 
-## Deploy on Vercel
+Use the **Import** button in the header or document list to initialize editable documents:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Format | Extension | Processing |
+|---|---|---|
+| Plain Text | `.txt` | Split into paragraphs and preserved as rich document text |
+| Markdown | `.md` | Converted to structured Headings, Bold/Italic, and Bullet lists |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Maximum file size: **5 MB**.
+
+---
+
+## 🔐 Sharing Permissions Matrix
+
+| Capability | Owner | Editor | Viewer |
+|---|:---:|:---:|:---:|
+| Read document | ✅ | ✅ | ✅ |
+| Edit content | ✅ | ✅ | ❌ |
+| Rename title | ✅ | ✅ | ❌ |
+| Delete document | ✅ | ❌ | ❌ |
+| Manage sharing & permissions | ✅ | ❌ | ❌ |
+
+---
+
+## 📖 Additional Documentation
+
+- [**Technology Stack & Design Architecture**](TECH_STACK.md) — Visual design, canvas swirl motion, and system overview.
+- [**Deployment & Scripts Guide**](DEPLOYMENT.md) — Available npm scripts, Docker, Vercel, and cloud deployment guides.
+- [**Structured Build Plan**](PLAN.md) — Milestone breakdown, time windows, and scope rationale.
+- [**Original Assignment Brief**](ASSIGNMENT.md) — Requirements and evaluation criteria.
+
+---
+
+## 📋 Prerequisites
+
+- **Node.js**: v18.x or higher (`node -v`)
+- **npm**: v8.x or higher (`npm -v`)
+- **Git**: Installed for source control

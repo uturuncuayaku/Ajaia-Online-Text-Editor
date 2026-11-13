@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  avatarUrl String?
+  createdAt DateTime @default(now())
+
+  ownedDocuments Document[]
+  shares         Share[]
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  title     String   @default("Untitled Document")
+  content   String   @default("") // Tiptap JSON stored as string
+  ownerId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner  User    @relation(fields: [ownerId], references: [id])
+  shares Share[]
+}
+
+model Share {
+  id         String   @id @default(uuid())
+  documentId String
+  userId     String
+  permission String   @default("viewer") // "viewer" | "editor"
+  createdAt  DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([documentId, userId])
+}
