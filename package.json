@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npx prisma generate && next build",
+    "build": "npx tsx prisma/prepare.ts && npx prisma generate && npx prisma db push && npx next build",
     "start": "next start",
     "lint": "eslint",
     "db:generate": "npx prisma generate",
