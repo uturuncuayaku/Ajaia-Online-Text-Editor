@@ -32,7 +32,7 @@ export async function ensureSeeded(prisma: PrismaClient) {
       },
     });
 
-    // Create sample document 1
+    // 1. Alice Doc 1: Welcome to Ajaia Docs
     const doc1 = await prisma.document.create({
       data: {
         title: "Welcome to Ajaia Docs",
@@ -56,7 +56,7 @@ export async function ensureSeeded(prisma: PrismaClient) {
             {
               type: "heading",
               attrs: { level: 2 },
-              content: [{ type: "text", text: "Core Features" }],
+              content: [{ type: "text", text: "Core Capabilities" }],
             },
             {
               type: "bulletList",
@@ -105,7 +105,56 @@ export async function ensureSeeded(prisma: PrismaClient) {
       },
     });
 
-    // Create sample document 2
+    // 2. Alice Doc 2: Product Strategy & Guidelines
+    const docAlice2 = await prisma.document.create({
+      data: {
+        title: "Product Strategy & Guidelines",
+        content: JSON.stringify({
+          type: "doc",
+          content: [
+            {
+              type: "heading",
+              attrs: { level: 1 },
+              content: [{ type: "text", text: "Product Strategy & Team Principles" }],
+            },
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "Our core mission is delivering rapid, AI-native internal tools with clear scope and uncompromising quality.",
+                },
+              ],
+            },
+            {
+              type: "heading",
+              attrs: { level: 2 },
+              content: [{ type: "text", text: "Guiding Principles" }],
+            },
+            {
+              type: "orderedList",
+              content: [
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "Prioritize depth in critical workflows over superficial breadth." }] }],
+                },
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "Maintain strict type safety and zero-downtime database migrations." }] }],
+                },
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "Design intuitive interfaces matching Ajaia's dark aesthetic." }] }],
+                },
+              ],
+            },
+          ],
+        }),
+        ownerId: alice.id,
+      },
+    });
+
+    // 3. Bob Doc: Project Roadmap Q1
     const doc2 = await prisma.document.create({
       data: {
         title: "Project Roadmap Q1",
@@ -123,9 +172,71 @@ export async function ensureSeeded(prisma: PrismaClient) {
                 { type: "text", text: "Key milestones and deliverables for the engineering team." },
               ],
             },
+            {
+              type: "orderedList",
+              content: [
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "Scaffolding & DB Schema completion" }] }],
+                },
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "File upload (.txt/.md) parser integration" }] }],
+                },
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "Vercel production verification" }] }],
+                },
+              ],
+            },
           ],
         }),
         ownerId: bob.id,
+      },
+    });
+
+    // 4. Charlie Doc: Design Feedback & UI System
+    const docCharlie = await prisma.document.create({
+      data: {
+        title: "Design System & UX Feedback",
+        content: JSON.stringify({
+          type: "doc",
+          content: [
+            {
+              type: "heading",
+              attrs: { level: 1 },
+              content: [{ type: "text", text: "Design System & UI Notes" }],
+            },
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "Review of the Ajaia website design tokens: background swirl canvas, sky blue highlights (#97c2f8), and slide-out persona drawer.",
+                },
+              ],
+            },
+            {
+              type: "heading",
+              attrs: { level: 2 },
+              content: [{ type: "text", text: "Feedback Summary" }],
+            },
+            {
+              type: "bulletList",
+              content: [
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "Canvas waves maintain 60 FPS performance." }] }],
+                },
+                {
+                  type: "listItem",
+                  content: [{ type: "paragraph", content: [{ type: "text", text: "Glassmorphism cards provide strong visual contrast." }] }],
+                },
+              ],
+            },
+          ],
+        }),
+        ownerId: charlie.id,
       },
     });
 
@@ -134,11 +245,15 @@ export async function ensureSeeded(prisma: PrismaClient) {
       data: [
         { documentId: doc1.id, userId: bob.id, permission: "editor" },
         { documentId: doc1.id, userId: charlie.id, permission: "viewer" },
+        { documentId: docAlice2.id, userId: bob.id, permission: "viewer" },
         { documentId: doc2.id, userId: alice.id, permission: "viewer" },
+        { documentId: doc2.id, userId: charlie.id, permission: "viewer" },
+        { documentId: docCharlie.id, userId: alice.id, permission: "editor" },
+        { documentId: docCharlie.id, userId: bob.id, permission: "editor" },
       ],
     });
 
-    console.log("✅ Auto-seeding completed.");
+    console.log("✅ Auto-seeding completed with multi-user documents.");
   } catch (err) {
     console.error("Auto-seed error:", err);
   }

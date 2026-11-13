@@ -16,7 +16,6 @@ async function main() {
       id: "user-alice",
       name: "Alice Johnson",
       email: "alice@ajaia.com",
-      avatarUrl: null,
     },
   });
 
@@ -25,7 +24,6 @@ async function main() {
       id: "user-bob",
       name: "Bob Smith",
       email: "bob@ajaia.com",
-      avatarUrl: null,
     },
   });
 
@@ -34,11 +32,10 @@ async function main() {
       id: "user-charlie",
       name: "Charlie Davis",
       email: "charlie@ajaia.com",
-      avatarUrl: null,
     },
   });
 
-  // Create sample documents
+  // 1. Alice Doc 1: Welcome to Ajaia Docs
   const doc1 = await prisma.document.create({
     data: {
       title: "Welcome to Ajaia Docs",
@@ -62,7 +59,7 @@ async function main() {
           {
             type: "heading",
             attrs: { level: 2 },
-            content: [{ type: "text", text: "Features" }],
+            content: [{ type: "text", text: "Core Capabilities" }],
           },
           {
             type: "bulletList",
@@ -73,15 +70,8 @@ async function main() {
                   {
                     type: "paragraph",
                     content: [
-                      {
-                        type: "text",
-                        marks: [{ type: "bold" }],
-                        text: "Rich text editing",
-                      },
-                      {
-                        type: "text",
-                        text: " — Bold, italic, underline, headings, and lists",
-                      },
+                      { type: "text", marks: [{ type: "bold" }], text: "Rich Text Editing" },
+                      { type: "text", text: " — Bold, italic, underline, headings, and lists." },
                     ],
                   },
                 ],
@@ -92,15 +82,8 @@ async function main() {
                   {
                     type: "paragraph",
                     content: [
-                      {
-                        type: "text",
-                        marks: [{ type: "bold" }],
-                        text: "File upload",
-                      },
-                      {
-                        type: "text",
-                        text: " — Import .txt and .md files as new documents",
-                      },
+                      { type: "text", marks: [{ type: "bold" }], text: "File Import" },
+                      { type: "text", text: " — Convert .txt and .md files into live drafts." },
                     ],
                   },
                 ],
@@ -111,15 +94,8 @@ async function main() {
                   {
                     type: "paragraph",
                     content: [
-                      {
-                        type: "text",
-                        marks: [{ type: "bold" }],
-                        text: "Sharing",
-                      },
-                      {
-                        type: "text",
-                        text: " — Share documents with teammates as viewer or editor",
-                      },
+                      { type: "text", marks: [{ type: "bold" }], text: "Access Control" },
+                      { type: "text", text: " — Share documents with Viewer vs Editor permissions." },
                     ],
                   },
                 ],
@@ -132,6 +108,56 @@ async function main() {
     },
   });
 
+  // 2. Alice Doc 2: Product Strategy & Guidelines
+  const docAlice2 = await prisma.document.create({
+    data: {
+      title: "Product Strategy & Guidelines",
+      content: JSON.stringify({
+        type: "doc",
+        content: [
+          {
+            type: "heading",
+            attrs: { level: 1 },
+            content: [{ type: "text", text: "Product Strategy & Team Principles" }],
+          },
+          {
+            type: "paragraph",
+            content: [
+              {
+                type: "text",
+                text: "Our core mission is delivering rapid, AI-native internal tools with clear scope and uncompromising quality.",
+              },
+            ],
+          },
+          {
+            type: "heading",
+            attrs: { level: 2 },
+            content: [{ type: "text", text: "Guiding Principles" }],
+          },
+          {
+            type: "orderedList",
+            content: [
+              {
+                type: "listItem",
+                content: [{ type: "paragraph", content: [{ type: "text", text: "Prioritize depth in critical workflows over superficial breadth." }] }],
+              },
+              {
+                type: "listItem",
+                content: [{ type: "paragraph", content: [{ type: "text", text: "Maintain strict type safety and zero-downtime database migrations." }] }],
+              },
+              {
+                type: "listItem",
+                content: [{ type: "paragraph", content: [{ type: "text", text: "Design intuitive interfaces matching Ajaia's dark aesthetic." }] }],
+              },
+            ],
+          },
+        ],
+      }),
+      ownerId: alice.id,
+    },
+  });
+
+  // 3. Bob Doc: Project Roadmap Q1
   const doc2 = await prisma.document.create({
     data: {
       title: "Project Roadmap Q1",
@@ -146,10 +172,7 @@ async function main() {
           {
             type: "paragraph",
             content: [
-              {
-                type: "text",
-                text: "Key milestones and deliverables for the first quarter.",
-              },
+              { type: "text", text: "Key milestones and deliverables for the engineering team." },
             ],
           },
           {
@@ -157,36 +180,15 @@ async function main() {
             content: [
               {
                 type: "listItem",
-                content: [
-                  {
-                    type: "paragraph",
-                    content: [
-                      { type: "text", text: "Launch internal beta" },
-                    ],
-                  },
-                ],
+                content: [{ type: "paragraph", content: [{ type: "text", text: "Scaffolding & DB Schema completion" }] }],
               },
               {
                 type: "listItem",
-                content: [
-                  {
-                    type: "paragraph",
-                    content: [
-                      { type: "text", text: "User feedback collection" },
-                    ],
-                  },
-                ],
+                content: [{ type: "paragraph", content: [{ type: "text", text: "File upload (.txt/.md) parser integration" }] }],
               },
               {
                 type: "listItem",
-                content: [
-                  {
-                    type: "paragraph",
-                    content: [
-                      { type: "text", text: "Public release preparation" },
-                    ],
-                  },
-                ],
+                content: [{ type: "paragraph", content: [{ type: "text", text: "Vercel production verification" }] }],
               },
             ],
           },
@@ -196,35 +198,67 @@ async function main() {
     },
   });
 
-  // Share doc1 with Bob (editor) and Charlie (viewer)
-  await prisma.share.create({
+  // 4. Charlie Doc: Design Feedback & UI System
+  const docCharlie = await prisma.document.create({
     data: {
-      documentId: doc1.id,
-      userId: bob.id,
-      permission: "editor",
+      title: "Design System & UX Feedback",
+      content: JSON.stringify({
+        type: "doc",
+        content: [
+          {
+            type: "heading",
+            attrs: { level: 1 },
+            content: [{ type: "text", text: "Design System & UI Notes" }],
+          },
+          {
+            type: "paragraph",
+            content: [
+              {
+                type: "text",
+                text: "Review of the Ajaia website design tokens: background swirl canvas, sky blue highlights (#97c2f8), and slide-out persona drawer.",
+              },
+            ],
+          },
+          {
+            type: "heading",
+            attrs: { level: 2 },
+            content: [{ type: "text", text: "Feedback Summary" }],
+          },
+          {
+            type: "bulletList",
+            content: [
+              {
+                type: "listItem",
+                content: [{ type: "paragraph", content: [{ type: "text", text: "Canvas waves maintain 60 FPS performance." }] }],
+              },
+              {
+                type: "listItem",
+                content: [{ type: "paragraph", content: [{ type: "text", text: "Glassmorphism cards provide strong visual contrast." }] }],
+              },
+            ],
+          },
+        ],
+      }),
+      ownerId: charlie.id,
     },
   });
 
-  await prisma.share.create({
-    data: {
-      documentId: doc1.id,
-      userId: charlie.id,
-      permission: "viewer",
-    },
-  });
-
-  // Share doc2 with Alice (viewer)
-  await prisma.share.create({
-    data: {
-      documentId: doc2.id,
-      userId: alice.id,
-      permission: "viewer",
-    },
+  // Shares
+  await prisma.share.createMany({
+    data: [
+      { documentId: doc1.id, userId: bob.id, permission: "editor" },
+      { documentId: doc1.id, userId: charlie.id, permission: "viewer" },
+      { documentId: docAlice2.id, userId: bob.id, permission: "viewer" },
+      { documentId: doc2.id, userId: alice.id, permission: "viewer" },
+      { documentId: doc2.id, userId: charlie.id, permission: "viewer" },
+      { documentId: docCharlie.id, userId: alice.id, permission: "editor" },
+      { documentId: docCharlie.id, userId: bob.id, permission: "editor" },
+    ],
   });
 
   console.log("✅ Seeded users:", [alice.name, bob.name, charlie.name]);
-  console.log("✅ Seeded documents:", [doc1.title, doc2.title]);
-  console.log("✅ Seeded shares: 3");
+  console.log("✅ Seeded documents across all 3 personas: 4 documents total");
+  console.log("✅ Seeded shares: 7");
   console.log("🎉 Database seeding complete!");
 }
 
