@@ -12,7 +12,7 @@
 |---|---|
 | **GitHub Repository** | [https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor](https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor) |
 | **Live Production App** | [https://ajaia-online-text-editor.vercel.app](https://ajaia-online-text-editor.vercel.app) |
-| **Walkthrough Video** | [Insert Loom / YouTube Link] |
+| **Walkthrough Video** | [https://youtu.be/bwTCgkEQq78](https://youtu.be/bwTCgkEQq78) |
 | **Local Port** | `http://localhost:3000` |
 
 ---

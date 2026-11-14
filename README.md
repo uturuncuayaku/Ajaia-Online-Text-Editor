@@ -1,6 +1,7 @@
 # Ajaia Online Text Editor
 
 [![Live App](https://img.shields.io/badge/Live_Deployment-Vercel-success?style=flat&logo=vercel)](https://ajaia-online-text-editor.vercel.app)
+[![Walkthrough Video](https://img.shields.io/badge/Walkthrough_Video-YouTube-red?logo=youtube)](https://youtu.be/bwTCgkEQq78)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org)
 [![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma)](https://www.prisma.io)

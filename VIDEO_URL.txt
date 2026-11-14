@@ -4,8 +4,7 @@ CANDIDATE: Andres Felipe Trujillo (andtruj23@gmail.com)
 ================================================================================
 
 1. WALKTHROUGH VIDEO URL (3-5 MINUTES):
-   [Insert your unlisted Loom or YouTube URL here]
-   e.g., https://www.loom.com/share/...
+   https://youtu.be/bwTCgkEQq78
 
 2. LIVE PRODUCT DEPLOYMENT:
    https://ajaia-online-text-editor.vercel.app
