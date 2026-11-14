@@ -7,8 +7,12 @@
 [![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)](https://www.sqlite.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?logo=tailwindcss)](https://tailwindcss.com)
 [![Tiptap](https://img.shields.io/badge/Editor-Tiptap-black)](https://tiptap.dev)
+[![Linux](https://img.shields.io/badge/Linux-Supported-FCC624?logo=linux&logoColor=black)](#)
+[![macOS](https://img.shields.io/badge/macOS-Supported-000000?logo=apple&logoColor=white)](#)
+[![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows&logoColor=white)](#)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](#)
 
-A lightweight collaborative document editor inspired by **Google Docs** and styled after [Ajaia's AI Platform](https://ajaia.ai/).
+A lightweight collaborative document editor inspired by **Google Docs** and styled after [Ajaia's AI Platform](https://ajaia.ai/). Verified and fully functional on **Linux**, **macOS**, **Windows**, and **Docker**.
 
 ---
 
@@ -33,7 +37,14 @@ cd Ajaia-Online-Text-Editor
 
 ### Option 1: One-Command Automated Setup by OS
 
-#### 🍎 macOS / 🐧 Linux:
+#### 🐧 Linux:
+```bash
+chmod +x setup.sh && ./setup.sh --seed --dev
+# or:
+bash setup.sh --seed --dev
+```
+
+#### 🍎 macOS:
 ```bash
 bash setup.sh --seed --dev
 ```
@@ -103,7 +114,9 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-### Option 4: Docker (Containerized Setup)
+### Option 4: Docker (Cross-Platform Containerized Setup)
+
+Runs identically on **Linux**, **macOS**, and **Windows** with automated database initialization and zero host configuration:
 
 ```bash
 docker compose up --build
