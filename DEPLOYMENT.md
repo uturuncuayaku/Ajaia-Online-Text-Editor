@@ -68,48 +68,22 @@ PORT=3000
 
 ---
 
-### Option 3: Docker Container
+### Option 3: Docker & Docker Compose
 
-A multi-stage Docker build can run anywhere (AWS ECS, Google Cloud Run, DigitalOcean, local server):
+The application includes a production-ready, multi-stage `Dockerfile` and `docker-compose.yml` with SQLite persistence.
 
-```dockerfile
-FROM node:20-alpine AS base
-WORKDIR /app
-RUN apk add --no-cache libc6-compat
-
-# Install dependencies
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-
-# Copy schema and generate Prisma client
-COPY prisma ./prisma/
-RUN npx prisma generate
-
-# Build app
-COPY . .
-RUN npm run build
-
-# Production runner
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-ENV PORT=3000
-
-COPY --from=base /app/node_modules ./node_modules
-COPY --from=base /app/.next ./.next
-COPY --from=base /app/public ./public
-COPY --from=base /app/package.json ./package.json
-COPY --from=base /app/prisma ./prisma
-
-EXPOSE 3000
-CMD ["npm", "run", "start"]
+#### One command launch:
+```bash
+docker compose up --build
 ```
 
-Build and run locally with Docker:
+#### Or using Docker CLI directly:
 ```bash
 docker build -t ajaia-online-text-editor .
-docker run -p 3000:3000 -v $(pwd)/prisma:/app/prisma ajaia-online-text-editor
+docker run -d -p 3000:3000 -v ajaia_data:/app/prisma --name ajaia-app ajaia-online-text-editor
 ```
+
+The container automatically seeds the database on cold start and serves the app at **http://localhost:3000**.
 
 ---
 

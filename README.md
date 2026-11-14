@@ -19,6 +19,7 @@ Install the following dependencies if you do not have them on your machine:
 * [**Node.js** (v18.x or higher)](https://nodejs.org/en/download)
 * [**npm** (v8.x or higher)](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) — *bundled with Node.js*
 * [**Git**](https://git-scm.com/downloads)
+* [**Docker & Docker Desktop**](https://www.docker.com/products/docker-desktop/) — *(optional, for containerized run)*
 
 ---
 
@@ -96,6 +97,16 @@ npx tsx prisma/seed.ts
 
 # 6. Start development server
 npm run dev
+```
+
+Open **[http://localhost:3000](http://localhost:3000)** in your browser.
+
+---
+
+### Option 4: Docker (Containerized Setup)
+
+```bash
+docker compose up --build
 ```
 
 Open **[http://localhost:3000](http://localhost:3000)** in your browser.
