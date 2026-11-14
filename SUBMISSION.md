@@ -45,9 +45,27 @@ No passwords required. Use the **User Switcher Drawer** in the top navigation ba
 
 ## ⚡ Local Setup
 
+### macOS / Linux:
 ```bash
 git clone https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor.git
 cd Ajaia-Online-Text-Editor
 bash setup.sh --seed --dev
 ```
+
+### Windows (PowerShell or CMD):
+```powershell
+# PowerShell:
+.\setup.ps1
+
+# CMD:
+setup.bat
+```
+
+### Universal npm (All Operating Systems):
+```bash
+npm install --legacy-peer-deps
+npm run setup
+npm run dev
+```
+
 Application will be live at `http://localhost:3000`.

@@ -24,44 +24,77 @@ Install the following dependencies if you do not have them on your machine:
 
 ## ⚡ Quick Start (Local Setup)
 
-### Option 1: One-Command Automated Setup (Recommended)
-
+Clone the repository first:
 ```bash
 git clone https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor.git
 cd Ajaia-Online-Text-Editor
+```
+
+### Option 1: One-Command Automated Setup by OS
+
+#### 🍎 macOS / 🐧 Linux:
+```bash
 bash setup.sh --seed --dev
 ```
 
-This single command installs all dependencies, initializes the SQLite database, seeds sample test personas, and launches the development server.
+#### 🪟 Windows (PowerShell):
+```powershell
+.\setup.ps1
+```
+
+#### 🪟 Windows (Command Prompt / CMD):
+```cmd
+setup.bat
+```
+
+These scripts automatically install all dependencies, generate the Prisma client, synchronize the SQLite database, seed test personas, and start the local development server at **[http://localhost:3000](http://localhost:3000)**.
+
+---
+
+### Option 2: Cross-Platform Universal npm Commands
+
+Works identically across **Windows**, **macOS**, and **Linux** without shell scripts:
+
+```bash
+# 1. Install dependencies
+npm install --legacy-peer-deps
+
+# 2. Run complete database setup & seed
+npm run setup
+
+# 3. Start development server
+npm run dev
+```
 
 Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-### Option 2: Manual Setup
+### Option 3: Step-by-Step Manual Setup
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor.git
-cd Ajaia-Online-Text-Editor
-
-# 2. Install dependencies
+# 1. Install dependencies
 npm install --legacy-peer-deps
 
-# 3. Approve Prisma engine binaries (npm v11+)
+# 2. Approve Prisma engine binaries (npm v11+)
 npm install-scripts approve @prisma/client prisma @prisma/engines esbuild
 
-# 4. Create environment file
+# 3. Create environment file
+# macOS / Linux:
 cp .env.example .env
+# Windows (PowerShell):
+Copy-Item .env.example .env
+# Windows (CMD):
+copy .env.example .env
 
-# 5. Generate Prisma Client and sync SQLite database
+# 4. Generate Prisma Client and sync SQLite database
 npx prisma generate
 npx prisma db push
 
-# 6. Seed initial test personas and documents
+# 5. Seed initial test personas and documents
 npx tsx prisma/seed.ts
 
-# 7. Start development server
+# 6. Start development server
 npm run dev
 ```
 
