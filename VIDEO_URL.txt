@@ -1,0 +1,21 @@
+================================================================================
+AJAIA LLC — AI-NATIVE FULL STACK DEVELOPER ASSIGNMENT
+CANDIDATE: Andres Felipe Trujillo (andtruj23@gmail.com)
+================================================================================
+
+1. WALKTHROUGH VIDEO URL (3-5 MINUTES):
+   [Insert your unlisted Loom or YouTube URL here]
+   e.g., https://www.loom.com/share/...
+
+2. LIVE PRODUCT DEPLOYMENT:
+   https://ajaia-online-text-editor.vercel.app
+
+3. GITHUB REPOSITORY:
+   https://github.com/uturuncuayaku/Ajaia-Online-Text-Editor
+
+4. SEEDED TEST PERSONAS (NO PASSWORDS NEEDED):
+   - Alice Johnson: alice@ajaia.com (Team Lead / Owner)
+   - Bob Smith: bob@ajaia.com (Full Stack Engineer / Editor)
+   - Charlie Davis: charlie@ajaia.com (Product Designer / Viewer)
+
+================================================================================
